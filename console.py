@@ -16,8 +16,6 @@ class HBNBCommand(cmd.Cmd):
     """Command interpreter class"""
 
     prompt = "(hbnb) "
-    available_classes = [
-            cls.__name__ for cls in BaseModel.__subclasses__()]
     cls_map = {
             "BaseModel": BaseModel, "User": User,
             "City": City, "State": State, "City": City,
@@ -45,7 +43,7 @@ class HBNBCommand(cmd.Cmd):
 
         else:
             class_name = arg.strip()
-            if arg not in HBNBCommand.available_classes:
+            if arg not in HBNBCommand.cls_map:
                 print("** class doesn't exist **")
             else:
                 new_instance = HBNBCommand.cls_map[class_name]()
@@ -54,14 +52,14 @@ class HBNBCommand(cmd.Cmd):
 
     def do_show(self, arg):
         """Prints the string representation of an instance"""
-        
+
         args = arg.split()
         if not args:
             print("** class name missing **")
             return
-        
+
         class_name = args[0]
-        if class_name not in HBNBCommand.available_classes:
+        if class_name not in HBNBCommand.cls_map:
             print("** class doesn't exist **")
             return
         if len(args) < 2:
@@ -78,14 +76,14 @@ class HBNBCommand(cmd.Cmd):
     def do_destroy(self, arg):
         """Deletes an instance based
         on the class name and id"""
-        
+
         args = arg.split()
         if not args:
             print("** class name missing **")
             return
 
         class_name = args[0]
-        if class_name not in HBNBCommand.available_classes:
+        if class_name not in HBNBCommand.cls_map:
             print("** class doesn't exist **")
             return
         if len(args) < 2:
@@ -99,7 +97,7 @@ class HBNBCommand(cmd.Cmd):
             storage.save()
         else:
             print("** no instance found **")
-    
+
     def do_all(self, arg):
         """Prints all string representations of instances"""
 
@@ -113,7 +111,7 @@ class HBNBCommand(cmd.Cmd):
             return
 
         class_name = args[0]
-        if class_name not in HBNBCommand.available_classes:
+        if class_name not in HBNBCommand.cls_map:
             print("** class doesn't exist **")
             return
         for key, obj in storage.all().items():
@@ -131,7 +129,7 @@ class HBNBCommand(cmd.Cmd):
             return
 
         class_name = args[0]
-        if class_name not in HBNBCommand.available_classes:
+        if class_name not in HBNBCommand.cls_map:
             print("** class doesn't exist **")
             return
         if len(args) < 2:
