@@ -1,6 +1,14 @@
 #!/usr/bin/python3
 """Defines the class FileStorage"""
 import json
+import os
+from models.base_model import BaseModel
+from models.user import User
+from models.place import Place
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.review import Review
 
 
 class FileStorage:
@@ -32,14 +40,15 @@ class FileStorage:
     def reload(self):
         """Deserializes the JSON file to __objects if it exists"""
         try:
-            with open(self.__file_path, 'r', encoding="utf-8") as file:
-                data = json.load(file)
-            for key, value in data.items():
-                class_name, obj_id = key.split(".")
-                class_name = class_name.split('"')[0]
-                obj_cls = eval(class_name)
-                new_obj = obj_cls(**value)
-                self.__objects[key] = new_obj
+            if os.path.exists(self.__file_path):
+                with open(self.__file_path, 'r', encoding="utf-8") as file:
+                    data = json.load(file)
+                for key, value in data.items():
+                    class_name, obj_id = key.split(".")
+                    class_name = class_name.split('"')[0]
+                    obj_cls = eval(class_name)
+                    new_obj = obj_cls(**value)
+                    self.__objects[key] = new_obj
 
         except FileNotFoundError:
             pass
