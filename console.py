@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """Module for the command line interpreter"""
 
+import shlex
 import cmd
 from models import storage
 from models.base_model import BaseModel
@@ -52,7 +53,7 @@ class HBNBCommand(cmd.Cmd):
 
     def do_show(self, arg):
         """Prints the string representation of an instance"""
-        args = arg.split()
+        args = shlex.split(arg)
         if not args:
             print("** class name missing **")
             return
@@ -183,13 +184,13 @@ class HBNBCommand(cmd.Cmd):
         except Exception:
             my_dict = None
         if isinstance(my_dict, dict):
-            new_str = args[1][args[1].find('(')+1:args[1].find(')')]
-            tokens.append(((new_str.split(", "))[0]).strip('"'))
+            tok_str = args[1][args[1].find('(')+1:args[1].find(')')]
+            tokens.append(((tok_str.split(", "))[0]).strip('"'))
             tokens.append(my_dict)
             return tokens
 
-        new_str = args[1][args[1].find('(')+1:args[1].find(')')]
-        tokens.append(" ".join(new_str.split(", ")))
+        tok_str = args[1][args[1].find('(')+1:args[1].find(')')]
+        tokens.append(" ".join(tok_str.split(", ")))
         return " ".join(i for i in tokens).strip()
 
     def default(self, line):
